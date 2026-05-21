@@ -712,7 +712,7 @@ ${resumen
 
                     return (
                         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-                            <div className="relative w-full max-w-6xl overflow-hidden rounded-[2rem] bg-white text-[#111] shadow-2xl">
+                            <div className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-[2rem] bg-white text-[#111] shadow-2xl">
                                 <button
                                     onClick={() => {
                                         setProductoSeleccionado(null);
@@ -728,7 +728,7 @@ ${resumen
                                         <img
                                             src={imagenes[imagenActiva]}
                                             alt={productoSeleccionado.nombre}
-                                            className="max-h-[500px] w-full rounded-2xl object-contain"
+                                            className="max-h-[260px] md:max-h-[500px] w-full rounded-2xl object-contain"
                                         />
 
                                         {imagenes.length > 1 && (
@@ -837,8 +837,8 @@ ${resumen
                                             )}
                                         </div>
 
-                                        <div className="mt-auto flex items-center justify-between border-t border-black/10 pt-8">
-                                            <div className="flex items-center gap-4">
+                                        <div className="mt-8 flex flex-col gap-5 border-t border-black/10 pt-8 md:flex-row md:items-center md:justify-between">
+                                            <div className="flex items-center justify-center gap-4 md:justify-start">
                                                 <button
                                                     onClick={() =>
                                                         setCantidadModal((prev) =>
