@@ -45,7 +45,7 @@ export default function Home() {
           <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-8">
             <a href="/">
               <img
-                src="/logo-baruk.png"
+                src="/baruk eventos-02.png"
                 alt="Baruk Eventos"
                 className="h-16 md:h-20 w-auto object-contain"
               />
@@ -283,7 +283,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
           <div>
             <img
-              src="/logo-baruk.png"
+              src="/baruk eventos-02.png"
               alt="Baruk Eventos"
               className="h-14 w-auto mb-5"
             />

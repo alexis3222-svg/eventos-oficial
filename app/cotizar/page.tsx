@@ -635,9 +635,11 @@ ${resumen
                                     />
 
                                     <div>
-                                        <p className="text-lg font-bold text-[#111]">
-                                            ${producto.precio}
-                                        </p>
+                                        {(!producto.variantes || producto.variantes.length === 0) && (
+                                            <p className="text-lg font-bold text-[#111]">
+                                                ${producto.precio}
+                                            </p>
+                                        )}
 
                                         <h3 className="text-xl font-bold uppercase tracking-[0.08em] text-[#111] mb-2">
                                             {producto.nombre}
@@ -850,9 +852,33 @@ ${resumen
                                                     -
                                                 </button>
 
-                                                <span className="min-w-[40px] text-center text-3xl font-bold">
-                                                    {cantidadModal}
-                                                </span>
+                                                <input
+                                                    type="number"
+                                                    min="1"
+                                                    max={disponibles}
+                                                    value={cantidadModal === 0 ? "" : cantidadModal}
+                                                    onChange={(e) => {
+                                                        const valor = Number(e.target.value);
+
+                                                        if (e.target.value === "") {
+                                                            setCantidadModal(0);
+                                                            return;
+                                                        }
+
+                                                        if (valor < 1) {
+                                                            setCantidadModal(1);
+                                                            return;
+                                                        }
+
+                                                        if (valor > disponibles) {
+                                                            setCantidadModal(disponibles);
+                                                            return;
+                                                        }
+
+                                                        setCantidadModal(valor);
+                                                    }}
+                                                    className="w-24 rounded-xl border border-black/10 px-3 py-3 text-center text-3xl font-bold text-[#111] outline-none focus:border-[#ffa500]"
+                                                />
 
                                                 <button
                                                     onClick={() =>
