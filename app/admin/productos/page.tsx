@@ -228,17 +228,9 @@ export default function ProductosAdminPage() {
             orden: Number(nuevoProducto.orden || 999),
             variantes: nuevoProducto.variantes,
         });
-
         if (error) {
-            console.error("ERROR SUPABASE:", error);
-
-            alert(
-                error.message ||
-                error.details ||
-                error.hint ||
-                JSON.stringify(error, null, 2)
-            );
-
+            console.error(error);
+            alert("No se pudo crear el producto.");
             return;
         }
 

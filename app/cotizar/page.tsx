@@ -174,39 +174,63 @@ export default function CotizarPage() {
         return Number.isFinite(cantidad) && cantidad > 0 ? cantidad : 1;
     };
 
-    const agregarProducto = (producto: Producto, cantidadManual?: number) => {
+    const agregarProducto = (
+        producto: Producto,
+        cantidadManual?: number,
+        varianteSeleccionada?: any
+    ) => {
         const cantidad =
             typeof cantidadManual === "number" && cantidadManual > 0
                 ? cantidadManual
                 : obtenerCantidad(producto);
 
-        const existente = resumen.find((item) => item.nombre === producto.nombre);
+        const precioFinal = varianteSeleccionada
+            ? Number(varianteSeleccionada.precio || 0)
+            : Number(producto.precio || 0);
+
+        const nombreFinal = varianteSeleccionada
+            ? `${producto.nombre} - ${varianteSeleccionada.dimension}`
+            : producto.nombre;
+
+        const stockFinal = varianteSeleccionada
+            ? Number(varianteSeleccionada.stock || producto.stock || 0)
+            : Number(producto.stock || 0);
+
+        const existente = resumen.find((item) => item.nombre === nombreFinal);
         const cantidadActual = existente ? existente.cantidad : 0;
         const nuevaCantidadTotal = cantidadActual + cantidad;
 
         const disponibles = Math.max(
             0,
-            Number(producto.stock || 0) -
-            (reservasFecha[producto.nombre] || 0)
+            stockFinal - (reservasFecha[nombreFinal] || 0)
         );
 
         if (nuevaCantidadTotal > disponibles) {
-            alert(`Solo quedan ${disponibles} disponible(s) de ${producto.nombre}.`);
+            alert(`Solo quedan ${disponibles} disponible(s) de ${nombreFinal}.`);
             return;
         }
 
         setResumen((prev) => {
-            const existe = prev.find((item) => item.nombre === producto.nombre);
+            const existe = prev.find((item) => item.nombre === nombreFinal);
 
             if (existe) {
                 return prev.map((item) =>
-                    item.nombre === producto.nombre
+                    item.nombre === nombreFinal
                         ? { ...item, cantidad: item.cantidad + cantidad }
                         : item
                 );
             }
 
-            return [...prev, { ...producto, cantidad }];
+            return [
+                ...prev,
+                {
+                    ...producto,
+                    nombre: nombreFinal,
+                    precio: precioFinal,
+                    stock: stockFinal,
+                    cantidad,
+                },
+            ];
         });
 
         setCantidades((prev) => ({
@@ -702,7 +726,7 @@ ${resumen
                     const productoActual = varianteSeleccionada || productoSeleccionado;
 
                     const nombreReserva = varianteSeleccionada
-                        ? `${productoSeleccionado.nombre} ${varianteSeleccionada.dimension}`
+                        ? `${productoSeleccionado.nombre} - ${varianteSeleccionada.dimension}`
                         : productoSeleccionado.nombre;
 
                     const disponibles = Math.max(
@@ -899,17 +923,14 @@ ${resumen
                                                 disabled={disponibles <= 0}
                                                 onClick={() => {
                                                     agregarProducto(
-                                                        {
-                                                            ...productoSeleccionado,
-                                                            nombre: varianteSeleccionada
-                                                                ? `${productoSeleccionado.nombre} ${varianteSeleccionada.dimension}`
-                                                                : productoSeleccionado.nombre,
-                                                            precio: precioActual,
-                                                            stock: disponibles,
-                                                            variante: varianteSeleccionada?.dimension || null,
-                                                        },
-                                                        cantidadModal
+                                                        productoSeleccionado,
+                                                        cantidadModal <= 0 ? 1 : cantidadModal,
+                                                        varianteSeleccionada
                                                     );
+
+                                                    setProductoSeleccionado(null);
+                                                    setVarianteSeleccionada(null);
+                                                    setCantidadModal(1);
 
                                                     setProductoSeleccionado(null);
                                                 }}
