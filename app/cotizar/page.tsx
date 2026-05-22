@@ -520,8 +520,8 @@ ${resumen
             <section className="px-6 pb-32">
 
                 {/* CATEGORÍAS */}
-                <div className="sticky top-0 z-40 bg-[#f3efe8]/70 backdrop-blur-md py-4">
-                    <div className="max-w-[1500px] mx-auto overflow-x-auto overflow-y-hidden pb-3">
+                <div className="sticky top-0 z-40 bg-[#f3efe8]/95 backdrop-blur-md pt-3 pb-1">
+                    <div className="max-w-[1500px] mx-auto overflow-x-auto overflow-y-hidden">
                         <div className="flex gap-4 min-w-max">
                             {categorias.map((categoria) => (
                                 <button
@@ -530,7 +530,7 @@ ${resumen
                                         setCategoriaActiva(categoria.nombre);
                                         setSubcategoriaActiva("");
                                     }}
-                                    className={`px-8 py-4 rounded-2xl font-semibold uppercase tracking-[0.20em] transition whitespace-nowrap ${categoriaActiva === categoria.nombre
+                                    className={`px-6 py-3 rounded-2xl font-semibold uppercase tracking-[0.20em] transition whitespace-nowrap ${categoriaActiva === categoria.nombre
                                         ? "bg-[#ffa500] text-white"
                                         : "bg-white text-[#111] hover:bg-[#ece7de]"
                                         }`}
@@ -541,15 +541,16 @@ ${resumen
                         </div>
                     </div>
                 </div>
+
                 {/* SUBCATEGORÍAS */}
                 {subcategoriasFiltradas.length > 0 && (
-                    <div className="sticky top-[92px] z-30 bg-[#f3efe8]/70 backdrop-blur-md py-3">
-                        <div className="max-w-[1500px] mx-auto overflow-x-auto overflow-y-hidden pb-3">
+                    <div className="sticky top-[58px] z-30 bg-[#f3efe8]/95 backdrop-blur-md pt-3 pb-3">
+                        <div className="max-w-[1500px] mx-auto overflow-x-auto overflow-y-hidden">
                             <div className="flex gap-3 min-w-max">
 
                                 <button
                                     onClick={() => setSubcategoriaActiva("")}
-                                    className={`px-6 py-3 rounded-xl text-sm font-medium transition whitespace-nowrap ${subcategoriaActiva === ""
+                                    className={`px-6 py-2 rounded-xl text-sm font-medium transition whitespace-nowrap ${subcategoriaActiva === ""
                                         ? "bg-[#111] text-white"
                                         : "bg-white text-[#111] hover:bg-[#ece7de]"
                                         }`}
@@ -566,7 +567,7 @@ ${resumen
                                             key={subcategoria.id}
                                             onClick={() => setSubcategoriaActiva(subcategoria.nombre)}
                                             className={`
-                px-6 py-3 rounded-xl text-sm uppercase tracking-[0.10em]
+                px-6 py-1 rounded-xl text-sm uppercase tracking-[0.10em]
                 transition whitespace-nowrap flex items-center gap-3
 
                 ${subcategoriaActiva === subcategoria.nombre
@@ -811,9 +812,9 @@ ${resumen
                                                 href={productoSeleccionado.youtube}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="mt-6 inline-flex w-fit items-center gap-3 rounded-full bg-red-600 px-6 py-4 text-lg font-bold uppercase tracking-[0.08em] text-white shadow-lg transition hover:bg-red-700"
+                                                className="mt-6 inline-flex w-fit items-center gap-3 rounded-full bg-red-600 px-6 py-1 text-lg font-bold uppercase tracking-[0.08em] text-white shadow-lg transition hover:bg-red-700"
                                             >
-                                                ▶ Ver trabajos en YouTube
+                                                ▶ Ver en YouTube
                                             </a>
                                         )}
 

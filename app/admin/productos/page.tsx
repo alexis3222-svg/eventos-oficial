@@ -230,8 +230,15 @@ export default function ProductosAdminPage() {
         });
 
         if (error) {
-            console.error(error);
-            alert("No se pudo crear el producto.");
+            console.error("ERROR SUPABASE:", error);
+
+            alert(
+                error.message ||
+                error.details ||
+                error.hint ||
+                JSON.stringify(error, null, 2)
+            );
+
             return;
         }
 
