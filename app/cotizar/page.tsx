@@ -801,9 +801,7 @@ ${resumen
                                         {productoSeleccionado.variantes?.length > 0 && (
                                             <div className="mb-6">
                                                 <p className="mb-3 text-sm font-bold uppercase tracking-[0.15em] text-gray-500">
-                                                    {productoSeleccionado.categorias?.nombre?.toLowerCase() === "catering"
-                                                        ? "Selecciona acompañamiento"
-                                                        : "Selecciona dimensión"}
+                                                    {productoSeleccionado.titulo_variantes || "Selecciona dimensión"}
                                                 </p>
 
                                                 <div className="flex flex-wrap gap-3">
