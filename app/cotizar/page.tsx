@@ -5,6 +5,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { supabase } from "@/lib/supabase";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 type VarianteProducto = {
     dimension: string;
@@ -54,7 +55,7 @@ type ItemResumen = Producto & {
     cantidad: number;
 };
 
-export default function CotizarPage() {
+function CotizarContent() {
     const [categoriaActiva, setCategoriaActiva] = useState("");
     const [categorias, setCategorias] = useState<any[]>([]);
     const [productos, setProductos] = useState<any[]>([]);
@@ -1155,5 +1156,13 @@ ${resumen
                 )
             }
         </main>
+    );
+}
+
+export default function CotizarPage() {
+    return (
+        <Suspense fallback={null}>
+            <CotizarContent />
+        </Suspense>
     );
 }
