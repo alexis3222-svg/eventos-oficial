@@ -30,6 +30,7 @@ type Producto = {
     categoria_id: number;
     subcategoria_id: number | null;
     orden: number;
+    titulo_variantes?: string;
 
     variantes?: VarianteProducto[];
 
@@ -63,6 +64,7 @@ export default function ProductosAdminPage() {
         categoria_id: "",
         subcategoria_id: "",
         orden: "",
+        titulo_variantes: "",
 
         variantes: [] as VarianteProducto[],
     });
@@ -117,10 +119,10 @@ export default function ProductosAdminPage() {
         const { data, error } = await supabase
             .from("productos")
             .select(`
-                *,
-                categorias(nombre),
-                subcategorias(nombre)
-            `)
+            *,
+            categorias(nombre),
+            subcategorias(nombre)
+        `)
             .order("orden", { ascending: true })
             .order("id", { ascending: false });
 
@@ -226,8 +228,11 @@ export default function ProductosAdminPage() {
                 ? Number(nuevoProducto.subcategoria_id)
                 : null,
             orden: Number(nuevoProducto.orden || 999),
+            titulo_variantes:
+                nuevoProducto.titulo_variantes || "Selecciona dimensión",
             variantes: nuevoProducto.variantes,
         });
+
         if (error) {
             console.error(error);
             alert("No se pudo crear el producto.");
@@ -243,6 +248,7 @@ export default function ProductosAdminPage() {
             categoria_id: "",
             subcategoria_id: "",
             orden: "",
+            titulo_variantes: "",
             variantes: [],
         });
 
@@ -276,6 +282,8 @@ export default function ProductosAdminPage() {
                 stock: Number(productoEditando.stock || 0),
                 imagen: productoEditando.imagen,
                 orden: Number(productoEditando.orden || 0),
+                titulo_variantes:
+                    productoEditando.titulo_variantes || "Selecciona dimensión",
                 variantes: productoEditando.variantes || [],
             })
             .eq("id", productoEditando.id);
@@ -516,7 +524,22 @@ export default function ProductosAdminPage() {
                             ))}
                         </select>
                     </div>
+
                     <div className="md:col-span-2 xl:col-span-3 border border-black/10 rounded-2xl p-5">
+
+                        <input
+                            type="text"
+                            placeholder="Título de variantes: Ej. Selecciona tamaño, acompañamiento, dimensión"
+                            value={nuevoProducto.titulo_variantes}
+                            onChange={(e) =>
+                                setNuevoProducto({
+                                    ...nuevoProducto,
+                                    titulo_variantes: e.target.value,
+                                })
+                            }
+                            className="w-full border border-black/10 rounded-xl px-5 py-4 mb-5"
+                        />
+
                         <h3 className="text-xl mb-4 font-bold">
                             Variantes del producto
                         </h3>
@@ -534,7 +557,6 @@ export default function ProductosAdminPage() {
                                 }
                                 className="border border-black/10 rounded-xl px-5 py-4"
                             />
-
                             <input
                                 type="number"
                                 placeholder="Precio"
@@ -791,6 +813,25 @@ export default function ProductosAdminPage() {
                                         className="w-full border border-black/10 rounded-xl px-5 py-4 min-h-[120px]"
                                     />
                                 </div>
+                            </div>
+
+                            <div className="md:col-span-2 mt-6">
+                                <label className="mb-2 block text-sm font-bold uppercase text-[#ffa500]">
+                                    Título de variantes
+                                </label>
+
+                                <input
+                                    type="text"
+                                    placeholder="Ej: Selecciona tamaño, acompañamiento, dimensión"
+                                    value={productoEditando.titulo_variantes || ""}
+                                    onChange={(e) =>
+                                        setProductoEditando({
+                                            ...productoEditando,
+                                            titulo_variantes: e.target.value,
+                                        })
+                                    }
+                                    className="w-full rounded-xl border border-black/10 px-5 py-4 text-[#111] outline-none focus:border-[#ffa500]"
+                                />
                             </div>
 
                             <div className="md:col-span-2">
