@@ -30,6 +30,8 @@ type Producto = {
 
     orden?: number;
 
+    titulo_variantes?: string;
+
     variantes?: VarianteProducto[];
 
     categorias?: {
@@ -466,7 +468,11 @@ ${resumen
                             className="border border-black/10 rounded-xl px-5 py-4 text-[#111] outline-none focus:border-[#d4a25a]"
                         />
 
-                        <div>
+                        <div className="flex flex-col gap-2">
+                            <label className="text-sm font-bold uppercase tracking-[0.12em] text-[#666]">
+                                Fecha del evento
+                            </label>
+
                             <input
                                 type="date"
                                 min={new Date().toISOString().split("T")[0]}
@@ -624,7 +630,7 @@ ${resumen
 
                 {/* CONTENIDO */}
                 <div className="w-full max-w-[1500px] mx-auto">
-                    <div className="mb-10">
+                    <div className="mt-4 mb-10">
                         <h2 className="text-4xl text-[#1d1d1d] mb-4">
                             {categoriaActiva || "Servicios"}
                         </h2>
@@ -864,7 +870,7 @@ ${resumen
                                             )}
                                         </div>
 
-                                        <div className="mt-8 flex flex-col gap-5 border-t border-black/10 pt-8 md:flex-row md:items-center md:justify-between">
+                                        <div className="mt-8 flex flex-col gap-5 border-t border-black/10 pt-3 md:flex-row md:items-center md:justify-between">
                                             <div className="flex items-center justify-center gap-4 md:justify-start">
                                                 <button
                                                     onClick={() =>
@@ -872,7 +878,7 @@ ${resumen
                                                             Math.max(1, prev - 1)
                                                         )
                                                     }
-                                                    className="h-14 w-14 rounded-full border border-black/10 text-3xl transition hover:bg-gray-100"
+                                                    className="h-11 w-11 rounded-full border border-black/10 text-3xl transition hover:bg-gray-100"
                                                 >
                                                     -
                                                 </button>
@@ -902,7 +908,7 @@ ${resumen
 
                                                         setCantidadModal(valor);
                                                     }}
-                                                    className="w-24 rounded-xl border border-black/10 px-3 py-3 text-center text-3xl font-bold text-[#111] outline-none focus:border-[#ffa500]"
+                                                    className="w-20 rounded-xl border border-black/10 px-3 py-2 text-center text-2xl font-bold text-[#111] outline-none focus:border-[#ffa500]"
                                                 />
 
                                                 <button
@@ -913,7 +919,7 @@ ${resumen
                                                                 : prev
                                                         )
                                                     }
-                                                    className="h-14 w-14 rounded-full border border-black/10 text-3xl transition hover:bg-gray-100"
+                                                    className="h-11 w-11 rounded-full border border-black/10 text-2xl transition hover:bg-gray-100"
                                                 >
                                                     +
                                                 </button>
@@ -932,9 +938,8 @@ ${resumen
                                                     setVarianteSeleccionada(null);
                                                     setCantidadModal(1);
 
-                                                    setProductoSeleccionado(null);
                                                 }}
-                                                className={`rounded-full px-10 py-5 text-xl font-bold uppercase tracking-[0.08em] text-white shadow-xl transition ${disponibles <= 0
+                                                className={`rounded-full px-8 py-2.5 text-lg font-bold uppercase tracking-[0.08em] text-white shadow-xl transition ${disponibles <= 0
                                                     ? "cursor-not-allowed bg-gray-400"
                                                     : "bg-[#ffa500] hover:brightness-95"
                                                     }`}
