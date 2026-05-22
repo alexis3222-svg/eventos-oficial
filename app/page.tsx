@@ -193,7 +193,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="relative overflow-hidden rounded-[2rem] h-[650px] group">
               <img
-                src="/hero2.png"
+                src="/8581cf0d-44eb-4a71-9346-1291647b0e06.png"
                 alt="Evento premium"
                 className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
               />
@@ -312,7 +312,7 @@ export default function Home() {
             <ul className="space-y-2 text-gray-400 text-sm">
               <li>+593 000 000 000</li>
               <li>barukeventos@gmail.com</li>
-              <li>El Reventador - Ecuador</li>
+              <li>Ecuador</li>
             </ul>
           </div>
 

@@ -4,48 +4,48 @@ export default function ServiciosPage() {
             titulo: "Carpas Premium",
             descripcion:
                 "Estructuras elegantes y modernas para eventos sociales y corporativos.",
-            imagen: "/hero2.png",
+            imagen: "45e663efa0d809a42a182ca6fdd63951.jpg",
+            categoria: "Espacios y Estructuras",
         },
         {
             titulo: "Catering",
             descripcion:
                 "Menús personalizados para bodas, XV años y celebraciones premium.",
-            imagen:
-                "https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=1974&auto=format&fit=crop",
+            imagen: "7c4f686498678662f53ab52b350a0f0d.jpg",
+            categoria: "Catering",
         },
         {
             titulo: "Hello Bris",
             descripcion:
                 "Fresas con crema, mesas dulces y postres para eventos memorables.",
-            imagen:
-                "https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=1974&auto=format&fit=crop",
+            imagen: "mostrador.jpeg",
+            categoria: "Catering",
         },
         {
             titulo: "Decoración",
             descripcion:
                 "Diseño elegante y ambientación exclusiva para cada celebración.",
-            imagen:
-                "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=1974&auto=format&fit=crop",
+            imagen: "254ada82329cf65d25f8c40dad7995d0.jpg",
+            categoria: "Decoración",
         },
         {
             titulo: "Mobiliario",
             descripcion:
                 "Mesas, sillas, mantelería e iluminación premium.",
-            imagen:
-                "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=1974&auto=format&fit=crop",
+            imagen: "dbe193cb099a7efbaf33aaae72d51c4a.jpg",
+            categoria: "Mobiliario",
         },
         {
             titulo: "Cabina Vogue",
             descripcion:
                 "Experiencia fotográfica elegante y moderna para tus invitados.",
-            imagen:
-                "https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=1974&auto=format&fit=crop",
+            imagen: "6fe224d70417261d72242e89340d64c2.jpg",
+            categoria: "Mobiliario",
         },
     ];
 
     return (
         <main className="min-h-screen bg-[#f8f4ec] text-[#222]">
-            {/* HERO */}
             <section className="px-6 py-28 text-center">
                 <p className="mb-5 text-sm uppercase tracking-[0.45em] text-[#d4a25a]">
                     Baruk Eventos
@@ -61,27 +61,22 @@ export default function ServiciosPage() {
                 </p>
             </section>
 
-            {/* GRID */}
             <section className="px-6 pb-32">
                 <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
-
                     {servicios.map((servicio, index) => (
                         <div
                             key={index}
                             className="bg-white rounded-[2rem] overflow-hidden shadow-lg hover:-translate-y-2 transition duration-500"
                         >
-                            {/* IMAGEN */}
                             <div className="overflow-hidden">
                                 <img
-                                    src={servicio.imagen}
+                                    src={`/${servicio.imagen}`}
                                     alt={servicio.titulo}
                                     className="w-full h-72 object-cover hover:scale-105 transition duration-700"
                                 />
                             </div>
 
-                            {/* CONTENIDO */}
                             <div className="p-8">
-
                                 <h2 className="text-3xl text-[#1d1d1d] mb-4">
                                     {servicio.titulo}
                                 </h2>
@@ -91,16 +86,16 @@ export default function ServiciosPage() {
                                 </p>
 
                                 <a
-                                    href="/cotizar"
+                                    href={`/cotizar?categoria=${encodeURIComponent(
+                                        servicio.categoria
+                                    )}`}
                                     className="inline-block bg-[#111] hover:bg-black transition text-white px-8 py-4 rounded-xl uppercase tracking-wider text-sm font-semibold"
                                 >
                                     Cotizar servicio
                                 </a>
-
                             </div>
                         </div>
                     ))}
-
                 </div>
             </section>
         </main>

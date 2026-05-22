@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { supabase } from "@/lib/supabase";
+import { useSearchParams } from "next/navigation";
 
 type VarianteProducto = {
     dimension: string;
@@ -70,6 +71,7 @@ export default function CotizarPage() {
     const [cantidadModal, setCantidadModal] = useState(1);
     const [imagenActiva, setImagenActiva] = useState(0);
     const [varianteSeleccionada, setVarianteSeleccionada] = useState<any>(null);
+    const searchParams = useSearchParams();
 
     const [datosEvento, setDatosEvento] = useState({
         nombre: "",
@@ -99,7 +101,21 @@ export default function CotizarPage() {
 
         setCategorias(data || []);
 
-        if (data && data.length > 0) {
+        const categoriaURL = searchParams.get("categoria");
+
+        if (categoriaURL && data && data.length > 0) {
+            const categoriaEncontrada = data.find(
+                (categoria) =>
+                    categoria.nombre.toLowerCase().trim() ===
+                    categoriaURL.toLowerCase().trim()
+            );
+
+            if (categoriaEncontrada) {
+                setCategoriaActiva(categoriaEncontrada.nombre);
+            } else {
+                setCategoriaActiva(data[0].nombre);
+            }
+        } else if (data && data.length > 0) {
             setCategoriaActiva(data[0].nombre);
         }
     };
@@ -150,7 +166,6 @@ export default function CotizarPage() {
             console.error(error);
             return;
         }
-
         const reservas: Record<string, number> = {};
 
         (data || []).forEach((cotizacion: any) => {
@@ -266,54 +281,127 @@ export default function CotizarPage() {
         0
     );
 
-    const generarPDF = () => {
-        const doc = new jsPDF();
-        const dorado: [number, number, number] = [212, 162, 90];
+    const getImageBase64 = async (url: string) => {
+        const response = await fetch(url);
+        const blob = await response.blob();
 
-        doc.setFontSize(24);
-        doc.setTextColor(...dorado);
-        doc.text("BARUK EVENTOS", 14, 22);
+        return new Promise<string>((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.readAsDataURL(blob);
+        });
+    };
 
-        doc.setFontSize(12);
-        doc.setTextColor(100);
-        doc.text("Cotización Referencial", 14, 30);
+    const generarPDF = async () => {
+        const doc = new jsPDF("p", "mm", "a4");
 
+        const naranja: [number, number, number] = [255, 165, 0];
+        const negro: [number, number, number] = [20, 20, 20];
+
+        const plantilla = await getImageBase64("/plantillaPDFbaruk.png");
+
+        doc.addImage(plantilla, "PNG", 0, 0, 210, 297, "", "FAST");
+
+        // TÍTULO
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(28);
+        doc.setTextColor(...negro);
+        doc.text("COTIZACIÓN", 112, 82);
+
+        // CLIENTE
         doc.setFontSize(11);
-        doc.setTextColor(40);
+        doc.text("Cliente:", 18, 86);
 
-        doc.text(`Cliente: ${datosEvento.nombre || "No especificado"}`, 14, 50);
-        doc.text(`Teléfono: ${datosEvento.telefono || "No especificado"}`, 14, 58);
-        doc.text(`Fecha del evento: ${datosEvento.fecha || "No especificada"}`, 14, 66);
-        doc.text(`Tipo de evento: ${datosEvento.tipoEvento || "No especificado"}`, 14, 74);
-        doc.text(`Invitados: ${datosEvento.invitados || "No especificado"}`, 14, 82);
-        doc.text(`Ubicación: ${datosEvento.ubicacion || "No especificada"}`, 14, 90);
+        doc.setFontSize(15);
+        doc.text(datosEvento.nombre || "No especificado", 18, 96);
 
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(10);
+        doc.text(`Teléfono: ${datosEvento.telefono || "No especificado"}`, 18, 108);
+        doc.text(`Dirección: ${datosEvento.ubicacion || "No especificada"}`, 18, 118);
+
+        // DATOS EVENTO
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(10);
+
+        doc.text("Fecha emisión", 112, 98);
+        doc.text("Fecha evento", 112, 108);
+        doc.text("Tipo evento", 112, 118);
+        doc.text("Invitados", 112, 128);
+        doc.text("Ubicación", 112, 138);
+
+        doc.setFont("helvetica", "normal");
+        doc.text(`: ${new Date().toLocaleDateString("es-EC")}`, 145, 98);
+        doc.text(`: ${datosEvento.fecha || "No especificada"}`, 145, 108);
+        doc.text(`: ${datosEvento.tipoEvento || "No especificado"}`, 145, 118);
+        doc.text(`: ${datosEvento.invitados || "No especificado"}`, 145, 128);
+        doc.text(`: ${datosEvento.ubicacion || "No especificada"}`, 145, 138);
+
+        // TABLA
         autoTable(doc, {
-            startY: 102,
-            head: [["Cantidad", "Servicio", "Precio", "Subtotal"]],
+            startY: 150,
+            head: [["ITEM DESCRIPTION", "PRICE", "QTY", "TOTAL"]],
             body: resumen.map((item) => [
-                item.cantidad,
                 item.nombre,
-                `$${item.precio}`,
-                `$${(item.precio * item.cantidad).toFixed(2)}`,
+                `$${Number(item.precio || 0).toFixed(2)}`,
+                item.cantidad,
+                `$${(Number(item.precio || 0) * item.cantidad).toFixed(2)}`,
             ]),
+            theme: "plain",
+            headStyles: {
+                fillColor: naranja,
+                textColor: [0, 0, 0],
+                fontStyle: "bold",
+                fontSize: 11,
+                halign: "center",
+            },
             styles: {
                 fontSize: 10,
+                cellPadding: 6,
+                textColor: [30, 30, 30],
             },
-            headStyles: {
-                fillColor: dorado,
+            alternateRowStyles: {
+                fillColor: [245, 245, 245],
+            },
+            columnStyles: {
+                0: { cellWidth: 92, halign: "left" },
+                1: { cellWidth: 30, halign: "center" },
+                2: { cellWidth: 22, halign: "center" },
+                3: { cellWidth: 38, halign: "center" },
             },
         });
 
-        const finalY = (doc as any).lastAutoTable.finalY + 15;
+        const finalY = (doc as any).lastAutoTable.finalY + 10;
 
-        doc.setFontSize(16);
-        doc.setTextColor(...dorado);
-        doc.text(`TOTAL REFERENCIAL: $${total.toFixed(2)}`, 14, finalY);
+        // TOTAL
+        doc.setFillColor(...naranja);
+        doc.rect(108, finalY, 85, 14, "F");
 
-        doc.setFontSize(10);
-        doc.setTextColor(120);
-        doc.text("Gracias por cotizar con Baruk Eventos", 14, finalY + 15);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(14);
+        doc.setTextColor(...negro);
+        doc.text("TOTAL", 120, finalY + 9);
+        doc.text(`$${total.toFixed(2)}`, 170, finalY + 9);
+
+        // INFO FINAL
+        doc.setFontSize(12);
+        doc.text("INFORMACIÓN IMPORTANTE", 18, finalY + 30);
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9);
+        doc.text("Esta cotización es referencial y está sujeta a disponibilidad.", 18, finalY + 39);
+        doc.text("Los precios pueden variar según fecha, ubicación y condiciones del evento.", 18, finalY + 46);
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(13);
+        doc.text("¡Gracias por cotizar con Baruk Eventos!", 18, finalY + 62);
+
+        // FIRMA
+        doc.setDrawColor(80);
+        doc.line(140, finalY + 58, 188, finalY + 58);
+
+        doc.setFontSize(9);
+        doc.text("Firma autorizada", 151, finalY + 65);
 
         doc.save("cotizacion-baruk-eventos.pdf");
     };
@@ -342,6 +430,7 @@ export default function CotizarPage() {
 
     const solicitarDisponibilidad = async () => {
         if (enviando) return;
+
         if (!datosEvento.nombre.trim()) {
             alert("Ingresa el nombre del cliente.");
             return;
@@ -361,6 +450,7 @@ export default function CotizarPage() {
             alert("Selecciona el tipo de evento.");
             return;
         }
+
         if (resumen.length === 0) {
             alert("Agrega al menos un producto o servicio.");
             return;
@@ -375,10 +465,10 @@ export default function CotizarPage() {
             return;
         }
 
-        generarPDF();
+        await generarPDF();
 
         const mensaje = `
-*BARUK EVENTOS - NUEVA COTIZACIÓN*
+*BARUK EVENTOS - COTIZACIÓN*
 
 Nombre: ${datosEvento.nombre || "No especificado"}
 Teléfono: ${datosEvento.telefono || "No especificado"}
@@ -408,6 +498,7 @@ ${resumen
         window.open(url, "_blank");
         setEnviando(false);
     };
+
     const categoriaSeleccionada = categorias.find(
         (categoria: any) => categoria.nombre === categoriaActiva
     );
