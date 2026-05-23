@@ -807,7 +807,7 @@ ${resumen
                     const imagenes =
                         productoSeleccionado.imagenes?.length > 0
                             ? productoSeleccionado.imagenes
-                            : [productoSeleccionado.imagen || "/hero2.png"];
+                            : [productoSeleccionado.imagen || "/hero2.png", "/mariposafija.jpg"];
 
                     const productoActual = varianteSeleccionada || productoSeleccionado;
 
@@ -837,7 +837,7 @@ ${resumen
                                 </button>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2">
-                                    <div className="flex flex-col items-center justify-center bg-[#f7f7f7] p-8">
+                                    <div className="relative flex flex-col items-center justify-center bg-[#f7f7f7] p-8">
                                         <img
                                             src={imagenes[imagenActiva]}
                                             alt={productoSeleccionado.nombre}
@@ -845,28 +845,33 @@ ${resumen
                                         />
 
                                         {imagenes.length > 1 && (
-                                            <div className="mt-5 flex gap-3 overflow-x-auto">
-                                                {imagenes.map(
-                                                    (img: string, index: number) => (
-                                                        <button
-                                                            key={index}
-                                                            onClick={() =>
-                                                                setImagenActiva(index)
-                                                            }
-                                                            className={`overflow-hidden rounded-xl border-2 transition ${imagenActiva === index
-                                                                ? "border-[#ffa500]"
-                                                                : "border-transparent"
-                                                                }`}
-                                                        >
-                                                            <img
-                                                                src={img}
-                                                                alt=""
-                                                                className="h-20 w-20 object-cover"
-                                                            />
-                                                        </button>
-                                                    )
-                                                )}
-                                            </div>
+                                            <>
+                                                <button
+                                                    onClick={() =>
+                                                        setImagenActiva((prev) =>
+                                                            prev === 0 ? imagenes.length - 1 : prev - 1
+                                                        )
+                                                    }
+                                                    className="absolute left-10 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/60 text-3xl text-white shadow-lg hover:bg-black"
+                                                >
+                                                    ‹
+                                                </button>
+
+                                                <button
+                                                    onClick={() =>
+                                                        setImagenActiva((prev) =>
+                                                            prev === imagenes.length - 1 ? 0 : prev + 1
+                                                        )
+                                                    }
+                                                    className="absolute right-10 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/60 text-3xl text-white shadow-lg hover:bg-black"
+                                                >
+                                                    ›
+                                                </button>
+
+                                                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 rounded-full bg-black/60 px-4 py-1 text-sm font-bold text-white">
+                                                    {imagenActiva + 1} / {imagenes.length}
+                                                </div>
+                                            </>
                                         )}
                                     </div>
 
