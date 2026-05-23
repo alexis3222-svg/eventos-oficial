@@ -807,7 +807,7 @@ ${resumen
                     const imagenes =
                         productoSeleccionado.imagenes?.length > 0
                             ? productoSeleccionado.imagenes
-                            : [productoSeleccionado.imagen || "/hero2.png", "/mariposafija.jpg"];
+                            : [productoSeleccionado.imagen || "/hero2.png"];
 
                     const productoActual = varianteSeleccionada || productoSeleccionado;
 
