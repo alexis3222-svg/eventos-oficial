@@ -310,7 +310,7 @@ export default function Home() {
             <h3 className="text-2xl mb-5">Contacto</h3>
 
             <ul className="space-y-2 text-gray-400 text-sm">
-              <li>+593 000 000 000</li>
+              <li>+593 986261763</li>
               <li>barukeventos@gmail.com</li>
               <li>Ecuador</li>
             </ul>

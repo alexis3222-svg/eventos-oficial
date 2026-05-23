@@ -471,12 +471,12 @@ function CotizarContent() {
         const mensaje = `
 *BARUK EVENTOS - COTIZACIÓN*
 
-Nombre: ${datosEvento.nombre || "No especificado"}
+Nombre: ${(datosEvento.nombre || "No especificado").toUpperCase()}
 Teléfono: ${datosEvento.telefono || "No especificado"}
 Fecha: ${datosEvento.fecha || "No especificada"}
 Evento: ${datosEvento.tipoEvento || "No especificado"}
 Invitados: ${datosEvento.invitados || "No especificado"}
-Ubicación: ${datosEvento.ubicacion || "No especificada"}
+Ubicación: ${(datosEvento.ubicacion || "No especificada").toUpperCase()}
 ━━━━━━━━━━━━━━
 
 ${resumen
@@ -493,7 +493,7 @@ ${resumen
 *Gracias por cotizar con Baruk Eventos*
 `;
 
-        const numero = "593980600237";
+        const numero = "593986261763";
         const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
 
         window.open(url, "_blank");
@@ -542,7 +542,7 @@ ${resumen
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-6">
                         <input
                             type="text"
-                            placeholder="Nombre completo"
+                            placeholder="Nombre y apellido"
                             value={datosEvento.nombre}
                             onChange={(e) =>
                                 setDatosEvento({ ...datosEvento, nombre: e.target.value })
@@ -579,25 +579,13 @@ ${resumen
                                         fecha,
                                     });
 
-                                    setResumen([]);
-                                    setCantidades({});
+                                    //setResumen([]);
+                                    //setCantidades({});
 
                                     await cargarReservasPorFecha(fecha);
                                 }}
                                 className="w-full border border-black/10 rounded-xl px-5 py-4 text-[#111] outline-none focus:border-[#d4a25a]"
                             />
-
-                            {fechaCargada && (
-                                <div className="mt-3 rounded-xl bg-[#faf7f2] px-4 py-3 text-sm text-[#666] border border-black/5">
-                                    La disponibilidad se actualizó para la fecha seleccionada.
-
-                                    {fechaAltaDemanda && (
-                                        <div className="mt-3 rounded-xl bg-orange-50 border border-orange-200 px-4 py-3 text-sm text-orange-700">
-                                            Alta demanda para esta fecha. Algunos servicios tienen disponibilidad limitada.
-                                        </div>
-                                    )}
-                                </div>
-                            )}
                         </div>
 
                         <select
