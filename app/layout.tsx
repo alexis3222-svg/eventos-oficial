@@ -21,6 +21,11 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "Baruk Eventos",
   description: "Eventos premium y experiencias inolvidables",
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  }
 };
 
 export default function RootLayout({
